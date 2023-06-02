@@ -1,28 +1,79 @@
 const videoCardContainer = document.querySelector(".video-container");
 
 
-let api_key = "AIzaSyCRjuKfEY9LbC2nt0M3hrW-NNFceODfBFk";
+
+let api_key = ""; //USE YOUR API KEY HERE
 let video_http = "https://www.googleapis.com/youtube/v3/videos?";
 let channel_http ="https://www.googleapis.com/youtube/v3/channels?";
 let search = "https://www.googleapis.com/youtube/v3/search?";
 
 
-document.getElementById("search-btn").addEventListener("click",function(){
-    const searchbtn =document.getElementById("searchbar");
-    console.log("Search", searchbtn.value)
-    fetch(search+new URLSearchParams({
-        key:api_key,
-        part:'snippet',
-        chart:'mostPopular',
-        maxResults:101,
-        regionCode:'IN'
-    })).then(function(searchResult){
-        console.log(searchResult)
-    }).catch(function(searchError){
 
-    })
+const searchInput = document.getElementById("searchbar");
+function searchVideos(){
+    alert("button clicked");
+//    video-container
+    let videoContainer = document.getElementsByClassName("video-container");
+    videoContainer.innerHTML = "";
+    let searchValue = searchInput.value;
+    fetchVideos(searchValue);
+}
 
-});
+async function fetchVideos(searchValue){
+    let endpoint = `https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&q=${searchValue}&key=${api_key}`;
+    try{
+        let response = await fetch(endpoint);
+        let result = await response.json();
+        showThumbnails(result.items);
+        console.log(result);
+    }
+    catch(error){
+        alert("something went wrong");
+        alert(error.message);
+    }
+}
+
+function showThumbnails(items){
+    for(let i = 0; i < items.length; i++){
+        let videoItem = items[i];
+        let imageUrl = videoItem.snippet.thumbnails.high.url;
+//        let imageElement = document.createElement("img");
+//        imageElement.src = imageUrl;
+//        imageElement.height = 240;
+//        imageElement.width = 135;
+//        document.body.append(imageElement);
+        let videoElement = document.createElement("div");
+        videoElement.id = videoItem.id.videoId;
+//        videoElement.style.background = `url(${imageUrl})`;
+        videoElement.innerHTML = `<p class="videoTitle">${videoItem.snippet.title}</p>`;
+        let searchContainer = document.getElementsByClassName("searchResultsDiv");
+//        searchResultsDiv.appendChild(videoElement);
+        video-container
+        document.body.append
+    }
+}
+
+//document.getElementById("search-btn").addEventListener("click",function(){
+//    const searchbtn =document.getElementById("searchbar");
+//    console.log("Search", searchbtn.value);
+//    const searchItem = searchbtn.value;
+//    console.log(searchItem);
+//    fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=searchbtn.value&key=AIzaSyCRjuKfEY9LbC2nt0M3hrW-NNFceODfBFk`)
+//    .then(function(searchResult){console.log(searchResult)})
+//    .catch(function(searchError){})
+////    fetch(search+new URLSearchParams({
+////        key:api_key,
+////        part:'snippet',
+////        chart:'mostPopular',
+////        maxResults:101,
+////        regionCode:'IN'
+////    })).then(function(searchResult){
+////        console.log(searchResult)
+////    }).catch(function(searchError){
+////
+////    })
+//
+//});
 
 
 
